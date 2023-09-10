@@ -46,7 +46,7 @@ jobs:
           context: ./frontend
           file: ./frontend/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/frontend_foodgram:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:latest
 
       - name: Push backend to Docker Hub
         uses: docker/build-push-action@v2
@@ -54,7 +54,7 @@ jobs:
           context: ./backend
           file: ./backend/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/backend_foodgram:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:latest
   
   deploy:
     name: Deploy image
@@ -69,8 +69,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend_foodgram:latest
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/backend_foodgram:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:latest
             sudo docker-compose stop
             sudo docker-compose rm backend
             sudo docker-compose up -d
