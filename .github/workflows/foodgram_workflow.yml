@@ -71,8 +71,8 @@ jobs:
           script: |
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend_foodgram:latest
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/backend_foodgram:latest
-            sudo docker-compose stop
-            sudo docker-compose rm backend
+            sudo docker compose stop
+            sudo docker compose rm backend
             sudo touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
@@ -82,10 +82,10 @@ jobs:
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             echo SECRET_KEY="${{ secrets.SECRET_KEY }}" >> .env
             echo DEBUG="${{ secrets.DEBUG }}" >> .env
-            sudo docker-compose up -d
-            sudo docker-compose exec -T backend python manage.py migrate
-            sudo docker-compose exec -T backend python manage.py collectstatic --no-input
-            sudo docker-compose exec -T backend python manage.py load_ingredients
+            sudo docker compose up -d
+            sudo docker compose exec -T backend python manage.py migrate
+            sudo docker compose exec -T backend python manage.py collectstatic --no-input
+            sudo docker compose exec -T backend python manage.py load_ingredients
             
   send_message_telegram:
     name: Send message to Telegram
