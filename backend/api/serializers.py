@@ -280,12 +280,11 @@ class CheckFavouriteSerializer(serializers.ModelSerializer):
         recipe = obj["recipe"]
         favorite = user.favourites.filter(recipe=recipe).exists()
         request_method = self.context["request"].method
-
         if request_method == "POST" and favorite:
             raise serializers.ValidationError(
                 "Этот рецепт уже есть в избранном"
             )
-        elif request_method == "DELETE" and not favorite:
+        if request_method == "DELETE" and not favorite:
             raise serializers.ValidationError(
                 "Этот рецепт отсутствует в избранном"
             )
