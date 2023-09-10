@@ -311,7 +311,9 @@ class CheckShoppingCartSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "Этот рецепт уже в списке покупок."
             )
-        elif request_method == "DELETE" and not shop_list:
-            raise serializers.ValidationError("Рецепт не в списке покупок.")
+        if request_method == "DELETE" and not shop_list:
+            raise serializers.ValidationError(
+                "Рецепт не в списке покупок."
+            )
 
         return obj
