@@ -10,6 +10,7 @@ cryptography==40.0.1
 defusedxml==0.7.1
 distlib==0.3.6
 Django==3.2
+django-colorfield==0.10.1
 django-cors-headers==3.14.0
 django-filter==22.1
 django-templated-mail==1.1.1
