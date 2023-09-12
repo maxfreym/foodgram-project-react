@@ -10,4 +10,4 @@ RUN pip install -r ./requirements.txt --no-cache-dir
 
 COPY . .
 
-CMD ["gunicorn", "foodgram.wsgi:application", "--bind", "0.0.0.0:10000", "--error-logfile", "/etc/gunicorn/log/error.log", "--access-logfile", "/etc/gunicorn/log/access.log"]
+CMD ["gunicorn", "foodgram.wsgi:application", "--bind", "0.0.0.0:10000"]
