@@ -1,42 +1,35 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser
+from django.core.validators import RegexValidator
 from django.db import models
 
-User = get_user_model()
+from .util import username_validator
 
 
-class CustomFollow(models.Model):
-    """Подписка"""
-
-    follower = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name="following_follows",
-        verbose_name="Подписчик",
+class User(AbstractUser):
+    first_name = models.CharField(
+        max_length=150,
+        verbose_name='Firstname'
     )
-    following = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name="follower_follows",
-        verbose_name="Автор",
+    last_name = models.CharField(
+        max_length=150,
+        verbose_name='Lastname'
+    )
+    username = models.CharField(
+        max_length=150,
+        verbose_name='Username',
+        unique=True,
+        validators=[RegexValidator(regex=r'^[\w.@+-]+\Z'), username_validator]
+    )
+    email = models.EmailField(
+        verbose_name='Email',
+        unique=True,
+        max_length=254
     )
 
     class Meta:
-        verbose_name = "Подписка"
-        verbose_name_plural = "Подписки"
-        ordering = ("id",)
-        constraints = (
+        ordering = ['date_joined']
+        constraints = [
             models.UniqueConstraint(
-                fields=(
-                    "follower",
-                    "following",
-                ),
-                name="unique_customfollow",
-            ),
-            models.CheckConstraint(
-                check=~models.Q(follower=models.F("following")),
-                name="self_subscription_prohibited",
-            ),
-        )
-
-    def __str__(self):
-        return f"{self.follower} подписан на {self.following}"
+                fields=['username', 'email'], name='unique_username_email'
+            )
+        ]

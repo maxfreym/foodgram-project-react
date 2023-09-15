@@ -1,42 +1,46 @@
 from django.contrib import admin
 
-from .models import (FavoriteRecipe, Ingredient, IngredientInRecipe, Recipes,
-                     ShoppingCart, Tag)
+from recipes.models import (Favorite, Follow, Ingredient, Recipe,
+                            RecipeIngredient, ShoppingCard, Tag, TagRecipe)
 
 
-class RecipeIngredientInline(admin.StackedInline):
-    model = IngredientInRecipe
+class RecipeIngredientLine(admin.TabularInline):
+    model = RecipeIngredient
     min_num = 1
 
 
-@admin.register(Recipes)
-class RecipesAdmin(admin.ModelAdmin):
-    list_display = ('name', 'author', 'favorite_count',)
-    list_filter = ('name', 'author', 'tags')
-    readonly_fields = ('favorite_count',)
-    inlines = [RecipeIngredientInline]
+@admin.register(Recipe)
+class RecipeAdmin(admin.ModelAdmin):
+    inlines = [RecipeIngredientLine]
+    list_display = (
+        'pk',
+        'name',
+        'author',
+        'cooking_time',
+        'pub_date',
+        'added_to_favorites_amount'
 
-    def favorite_count(self, obj):
-        return FavoriteRecipe.objects.filter(recipe=obj).count()
+    )
+    list_filter = ('name', 'author', 'tags', 'pub_date', 'cooking_time')
+    readonly_fields = ('added_to_favorites_amount',)
+    empty_value_display = '-пусто-'
+
+    def added_to_favorites_amount(self, obj):
+        return Favorite.objects.filter(recipe=obj).count()
+
+    added_to_favorites_amount.short_description = 'Добавлений в избранное'
 
 
 @admin.register(Ingredient)
-class IngredientsAdmin(admin.ModelAdmin):
+class IngredientAdmin(admin.ModelAdmin):
     list_display = ('name', 'measurement_unit')
-    list_filter = ('name',)
     search_fields = ('name',)
+    empty_value_display = '-пусто-'
 
 
-@admin.register(Tag)
-class TagsAdmin(admin.ModelAdmin):
-    list_display = ('name', 'color', 'slug')
-
-
-@admin.register(FavoriteRecipe)
-class FavoriteAdmin(admin.ModelAdmin):
-    list_display = ('user', 'recipe')
-
-
-@admin.register(ShoppingCart)
-class ShoppingCartAdmin(admin.ModelAdmin):
-    list_display = ('user', 'recipe')
+admin.site.register(Tag)
+admin.site.register(TagRecipe)
+admin.site.register(RecipeIngredient)
+admin.site.register(Follow)
+admin.site.register(ShoppingCard)
+admin.site.register(Favorite)

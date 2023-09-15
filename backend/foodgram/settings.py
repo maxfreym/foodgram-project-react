@@ -112,31 +112,35 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
+STOP_WORD = ['me']
+
+
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.TokenAuthentication",
-    ),
-    "DEFAULT_FILTER_BACKENDS": [
-        "django_filters.rest_framework.DjangoFilterBackend"
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
     ],
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
     ],
-    "DEFAULT_PAGINATION_CLASS": "api.paginations.LimitPageNumberPagination",
-    "PAGE_SIZE": 8,
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 8,
 }
 
+AUTH_USER_MODEL = 'users.User'
+
 DJOSER = {
-    "LOGIN_FIELD": "email",
-    "SERIALIZERS": {
-        "user_create": "api.serializers.CustomUserCreateSerializer",
-        "user": "api.serializers.CustomUserListSerializer",
-        "current_user": "api.serializers.CustomUserListSerializer",
+    'LOGIN_FIELD': 'email',
+    'SEND_ACTIVATION_EMAIL': False,
+    'SERIALIZERS': {
+        'user': 'api.serializers.CustomUserSerializer',
+        'user_create': 'api.serializers.CustomUserCreateSerializer',
+        'current_user': 'api.serializers.CustomUserSerializer',
     },
-    "PERMISSIONS": {
-        "user": ["rest_framework.permissions.IsAuthenticated"],
-        "user_list": ["rest_framework.permissions.AllowAny"],
-        "token_destroy": ["rest_framework.permissions.IsAuthenticated"],
+    'PERMISSIONS': {
+        'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly'],
+        'user_list': ['rest_framework.permissions.AllowAny']
     },
     "HIDE_USERS": False,
 }
