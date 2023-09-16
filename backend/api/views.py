@@ -124,7 +124,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         response = HttpResponse(product_list,
                                 content_type='text/plain')
         response['Content-Disposition'] = (
-            f'attachment; filename={settings.FILENAME_SHOPPING_CART}')
+            f'attachment; filename={settings.SHOPPING_CART}')
         return response
 
     @action(
