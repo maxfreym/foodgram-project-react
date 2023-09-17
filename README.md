@@ -117,5 +117,6 @@ TELEGRAM_TOKEN=<токен вашего бота>
 Окороков Максим - [https://github.com/maxfreym](https://github.com/maxfreym)
 
 #### Юзер для ревью
+server: foodgramwrk.ddns.net 62.217.178.136
 login: maxfreym
 pass: m11m12m87
